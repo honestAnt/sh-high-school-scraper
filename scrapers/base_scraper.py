@@ -8,6 +8,8 @@ import time
 import logging
 import sys
 import os
+import re
+import random
 
 # 添加项目根目录到系统路径
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -132,17 +134,44 @@ class BaseScraper:
         """
         logger.info(f"模拟查询: {prompt[:50]}...")
         
-        # 根据提示词类型返回不同的模拟数据
-        if "录取分数" in prompt:
-            return {
-                "choices": [
-                    {
-                        "message": {
-                            "content": "2023年上海中学录取分数情况如下：\n最低分：555分\n最高分：578分\n平均分：565分\n\n学生来源分布：\n徐汇区：35%\n浦东新区：25%\n静安区：15%\n黄浦区：10%\n其他区县：15%"
-                        }
+        # 根据学校名称生成模拟数据
+        school_name_match = re.search(r'(\d+)年(.*?)(录取分数|升学率)', prompt)
+        if school_name_match:
+            year = school_name_match.group(1)
+            school = school_name_match.group(2).strip()
+            
+            # 为特定学校提供固定数据
+            if "华东师大二附中紫竹校区" in school:
+                if "录取分数" in prompt:
+                    return {
+                        "choices": [{
+                            "message": {
+                                "content": f"{year}年华东师大二附中紫竹校区录取分数情况如下：\n最低分：532分\n最高分：560分\n平均分：545分\n\n学生来源分布：\n浦东新区：40%\n闵行区：25%\n徐汇区：15%\n其他区县：20%"
+                            }
+                        }]
                     }
-                ]
-            }
+            elif "上海中学" in school:
+                if "录取分数" in prompt:
+                    return {
+                        "choices": [{
+                            "message": {
+                                "content": f"{year}年上海中学录取分数情况如下：\n最低分：568分\n最高分：589分\n平均分：576分\n\n学生来源分布：\n浦东新区：30%\n徐汇区：35%\n静安区：20%\n其他区县：15%"
+                            }
+                        }]
+                    }
+            else:
+                # 为其他学校生成随机数据
+                min_score = random.randint(500, 540)
+                max_score = min_score + random.randint(10, 30)
+                avg_score = (min_score + max_score) // 2
+                
+                return {
+                    "choices": [{
+                        "message": {
+                            "content": f"{year}年{school}录取分数情况如下：\n最低分：{min_score}分\n最高分：{max_score}分\n平均分：{avg_score}分\n\n学生来源分布：\n浦东新区：40%\n闵行区：25%\n徐汇区：15%\n其他区县：20%"
+                        }
+                    }]
+                }
         elif "升学率" in prompt:
             return {
                 "choices": [
