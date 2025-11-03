@@ -1,0 +1,3 @@
+2025-11-03 14:55:15,880 - base_scraper - ERROR - API密钥未设置，请在config.py中设置DOUBAN_API_KEY或初始化时提供
+2025-11-03 15:51:25,834 - base_scraper - ERROR - API密钥未设置，请在config.py中设置DOUBAN_API_KEY或初始化时提供
+2025-11-03 15:51:40,420 - base_scraper - ERROR - API密钥未设置，请在config.py中设置DOUBAN_API_KEY或初始化时提供
